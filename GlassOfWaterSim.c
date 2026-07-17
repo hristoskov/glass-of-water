@@ -13,10 +13,10 @@ void RunCyclic(CModelSimulation_ts *ctx, unsigned long cycleTime)
 
     float plumbingFlow = CppModel_getParameterF32(ctx, "plumbingFlow [l/min]", 15.0f) / 60.0f;   // Default plumbing flow is 15 liters per minute converted to liters per second
     float glassCapacity = CppModel_getParameterF32(ctx, "glassCapacity [ml]", 250.0f) / 1000.0f; // Default glass capacity is 250 ml converted to liters
-    float openingSlope = CppModel_getParameterF32(ctx, "openingSlope [%/s]", 100.0f) * 0.01f;    // Default opening slope is 1% per second converted to a fraction
-    float closingSlope = CppModel_getParameterF32(ctx, "closingSlope [%/s]", 400.0f) * 0.01f;    // Default closing slope is 4% per second converted to a fraction
+    float openingSlope = CppModel_getParameterF32(ctx, "openingSlope [%/s]", 100.0f) * 0.01f;    // Default opening slope is 100% per second converted to a fraction
+    float closingSlope = CppModel_getParameterF32(ctx, "closingSlope [%/s]", 400.0f) * 0.01f;    // Default closing slope is 400% per second converted to a fraction
 
-    float desiredLevel = CppModel_getInputF32(ctx, "desiredLevel [0.01%]", 0.8f); // Default desired level is 80%
+    float desiredLevel = CppModel_getInputF32(ctx, "desiredLevel [0.01%]", 80.0f * 0.01f); // Default desired level is 80%
 
     // Control loop
     float error = desiredLevel - actualLevel;
