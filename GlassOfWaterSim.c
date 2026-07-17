@@ -4,6 +4,8 @@
 
 float tapOpening = 0.0f;
 float actualVolume = 0.0f;
+float actualLevel = 0.0f;
+float actualFlow = 0.0f;
 
 void RunCyclic(CModelSimulation_ts *ctx, unsigned long cycleTime)
 {
@@ -16,11 +18,12 @@ void RunCyclic(CModelSimulation_ts *ctx, unsigned long cycleTime)
 
     float desiredLevel = CppModel_getInputF32(ctx, "desiredLevel [0.01%]", 0.8f); // Default desired level is 80%
 
-    float actualLevel = sensor(glassCapacity, actualVolume);
+    // Control loop
     float error = desiredLevel - actualLevel;
     tapOpening = control(dt, openingSlope, closingSlope, tapOpening, error);
-    float actualFlow = actuator(plumbingFlow, tapOpening);
+    actualFlow = actuator(plumbingFlow, tapOpening);
     actualVolume = glass(dt, glassCapacity, actualVolume, actualFlow);
+    actualLevel = sensor(glassCapacity, actualVolume);
 
     CppModel_setOutputF32(ctx, "error [0.01%]", error);
     CppModel_setOutputF32(ctx, "tapOpening [0.01%]", tapOpening);
