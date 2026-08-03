@@ -39,6 +39,7 @@ void RunCyclic(CModelSimulation_ts *ctx, unsigned long cycleTime)
 
 int main()
 {
+    CppModel_requireNonInteractive("Glasses Filling");
     // Create a simulation that runs for 4000 milliseconds with a step time of 10 milliseconds
     CModelSimulation_ts *sim = CppModel_create("Glasses Filling", 4000, 10);
 

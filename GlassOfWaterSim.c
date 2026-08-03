@@ -1,6 +1,7 @@
 #include "GlassOfWaterLib.h"
 
 #include "cppmodel/CModel.h"
+#include "GlassOfWaterVerification.h"
 
 float tapOpening = 0.0f;
 float actualVolume = 0.0f;
@@ -18,6 +19,8 @@ void RunCyclic(CModelSimulation_ts *ctx, unsigned long cycleTime)
 
     float desiredLevel = CppModel_getInputF32(ctx, "desiredLevel [0.01%]", 80.0f * 0.01f); // Default desired level is 80%
 
+    float previousLevel = actualLevel;
+
     // Control loop
     float error = desiredLevel - actualLevel;
     tapOpening = control(dt, openingSlope, closingSlope, tapOpening, error);
@@ -30,10 +33,15 @@ void RunCyclic(CModelSimulation_ts *ctx, unsigned long cycleTime)
     CppModel_setOutputF32(ctx, "actualFlow [l/s]", actualFlow);
     CppModel_setOutputF32(ctx, "actualVolume [l]", actualVolume);
     CppModel_setOutputF32(ctx, "actualLevel [0.01%]", actualLevel);
+
+    uint8_t stepResult = VerifyGlassFilling(cycleTime, actualLevel, desiredLevel, actualFlow, previousLevel);
+    CppModel_setOutputI8(ctx, "CppModel.StepResult", stepResult);
 }
 
 int main()
 {
+    // CppModel_requireNonInteractive("Glass of Water");
+
     CModelSimulation_ts *sim = CppModel_create("Glass of Water", 2000, 10);
 
     CppModel_setRunStepFunction(sim, RunCyclic);

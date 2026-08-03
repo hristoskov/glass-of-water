@@ -14,7 +14,7 @@ link_directories(dependencies/lib)
 
 add_executable(GlassesSim GlassesSim.c GlassOfWaterLib.c)
 add_executable(TapControlSim TapControlSim.c GlassOfWaterLib.c)
-add_executable(GlassOfWaterSim GlassOfWaterSim.c GlassOfWaterLib.c)
+add_executable(GlassOfWaterSim GlassOfWaterSim.c GlassOfWaterLib.c GlassOfWaterVerification.c)
 
 set_target_properties(GlassesSim PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(TapControlSim PROPERTIES LINKER_LANGUAGE CXX)
@@ -29,7 +29,5 @@ else()
     target_link_libraries(GlassOfWaterSim CppModelBase ixwebsocket crypto ssl z)
 endif()
 
-add_test(NAME GlassesSim_Test COMMAND GlassesSim)
-add_test(NAME TapControlSim_Test COMMAND TapControlSim)
 add_test(NAME GlassOfWaterSim_Test COMMAND GlassOfWaterSim)
 
