@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci_test_compilers:
+  water_ci:
     runs-on: ubuntu-latest
     container: gcc:16
     steps:
