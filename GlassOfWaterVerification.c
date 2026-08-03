@@ -25,19 +25,19 @@ uint8_t PostFillingCheck(unsigned long delta, float actualLevel, float desiredLe
     return (actualLevel >= desiredLevel) ? 1 : 0;
 }
 
-uint8_t VerifyGlassFilling(unsigned long cycleTime, float actualLevel, float desiredLevel, float actualFlow, float previousLevel)
+uint8_t VerifyGlassFilling(unsigned long cycleTime, float actualLevel, float desiredLevel, float tapOpening, float previousLevel)
 {
     switch (fillingState)
     {
     case PRE_FILLING:
-        if (actualFlow > 0.0f)
+        if (tapOpening > 0.0f)
         {
             fillingState = FILLING;
         }
         else
             return PreFillingCheck(cycleTime);
     case FILLING:
-        if (actualFlow <= 0.0f)
+        if (tapOpening <= 0.0f)
         {
             fillingState = POST_FILLING;
         }
