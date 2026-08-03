@@ -40,8 +40,6 @@ void RunCyclic(CModelSimulation_ts *ctx, unsigned long cycleTime)
 
 int main()
 {
-    // CppModel_requireNonInteractive("Glass of Water");
-
     CModelSimulation_ts *sim = CppModel_create("Glass of Water", 2000, 10);
 
     CppModel_setRunStepFunction(sim, RunCyclic);
