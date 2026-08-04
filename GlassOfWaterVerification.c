@@ -8,10 +8,10 @@ typedef enum
 } FillingState_t;
 
 static FillingState_t fillingState = PRE_FILLING;
+static float previousLevel = 0.0f;
 
 uint8_t PreFillingCheck(unsigned long delta)
 {
-    // Before we start filling, the result is always satisfactory, as we haven't started yet.
     return 1;
 }
 
@@ -25,8 +25,9 @@ uint8_t PostFillingCheck(unsigned long delta, float actualLevel, float desiredLe
     return (actualLevel >= desiredLevel) ? 1 : 0;
 }
 
-uint8_t VerifyGlassFilling(unsigned long cycleTime, float actualLevel, float desiredLevel, float tapOpening, float previousLevel)
+uint8_t VerifyGlassFilling(unsigned long cycleTime, float actualLevel, float desiredLevel, float tapOpening)
 {
+    uint8_t result = 0;
     switch (fillingState)
     {
     case PRE_FILLING:
@@ -35,17 +36,27 @@ uint8_t VerifyGlassFilling(unsigned long cycleTime, float actualLevel, float des
             fillingState = FILLING;
         }
         else
-            return PreFillingCheck(cycleTime);
+        {
+            result = PreFillingCheck(cycleTime);
+            break;
+        }
     case FILLING:
         if (tapOpening <= 0.0f)
         {
             fillingState = POST_FILLING;
         }
         else
-            return FillingCheck(cycleTime, actualLevel, previousLevel);
+        {
+            result = FillingCheck(cycleTime, actualLevel, previousLevel);
+            break;
+        }
     case POST_FILLING:
-        return PostFillingCheck(cycleTime, actualLevel, desiredLevel);
+        result = PostFillingCheck(cycleTime, actualLevel, desiredLevel);
+        break;
     default:
-        return 0;
+        result = 0;
+        break;
     }
+    previousLevel = actualLevel;
+    return result;
 }
